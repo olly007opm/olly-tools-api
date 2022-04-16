@@ -33,6 +33,37 @@ def demo(number: str, origin_base: int, target_base: int, response: Response):
 
 @router.get("/currency", summary="Convert an amount between currencies")
 def currency(amount: int, origin: str, target: str, response: Response):
+    """
+    # Supported currencies
+    ```
+    - 1INCH   - BRL     - DOGE    - HKD     - KYD     - MYR     - SEK     - USD
+    - ADA     - BSD     - DOP     - HNL     - KZT     - MZN     - SGD     - USDC
+    - AED     - BTC     - DOT     - HRK     - LAK     - NAD     - SHIB    - USDT
+    - AFN     - BTN     - DZD     - HTG     - LBP     - NGN     - SHP     - UYU
+    - ALGO    - BUSD    - EGLD    - HUF     - LINK    - NIO     - SLL     - UZS
+    - ALL     - BWP     - EGP     - ICP     - LKR     - NOK     - SOL     - VEF
+    - AMD     - BYN     - ENJ     - IDR     - LRD     - NPR     - SOS     - VET
+    - ANG     - BYR     - ERN     - ILS     - LSL     - NZD     - SRD     - VND
+    - AOA     - BZD     - ETB     - IMP     - LTC     - OMR     - STD     - VUV
+    - ARS     - CAD     - ETC     - INJ     - LTL     - ONE     - SVC     - WBTC
+    - ATOM    - CDF     - ETH     - INR     - LUNA    - PAB     - SYP     - WST
+    - AUD     - CHF     - EUR     - IQD     - LVL     - PEN     - SZL     - XAF
+    - AVAX    - CHZ     - FIL     - IRR     - LYD     - PGK     - THB     - XAG
+    - AWG     - CLF     - FJD     - ISK     - MAD     - PHP     - THETA   - XAU
+    - AZN     - CLP     - FKP     - JEP     - MATIC   - PKR     - TJS     - XCD
+    - BAM     - CNY     - FTT     - JMD     - MDL     - PLN     - TMT     - XDR
+    - BBD     - COP     - GBP     - JOD     - MGA     - PYG     - TND     - XLM
+    - BCH     - CRC     - GEL     - JPY     - MKD     - QAR     - TOP     - XMR
+    - BDT     - CRO     - GGP     - KES     - MMK     - RON     - TRX     - XOF
+    - BGN     - CUC     - GHS     - KGS     - MNT     - RSD     - TRY     - XPF
+    - BHD     - CUP     - GIP     - KHR     - MOP     - RUB     - TTD     - XRP
+    - BIF     - CVE     - GMD     - KMF     - MRO     - RWF     - TWD     - YER
+    - BMD     - CZK     - GNF     - KPW     - MUR     - SAR     - TZS     - ZAR
+    - BNB     - DAI     - GRT     - KRW     - MVR     - SBD     - UAH     - ZMK
+    - BND     - DJF     - GTQ     - KSM     - MWK     - SCR     - UGX     - ZMW
+    - BOB     - DKK     - GYD     - KWD     - MXN     - SDG     - UNI     - ZWL
+    ```
+    """
     # Get exchange rates
     rate = requests.get(
         f"https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/{origin}/{target}.json")
