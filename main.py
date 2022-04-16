@@ -38,17 +38,17 @@ def custom_openapi():
         return app.openapi_schema
     tags_metadata = [
         {
-            "name": "other",
-            "description": "Other api endpoints that cannot be categorised",
-        },
-        {
             "name": "convert",
             "description": "Convert data between different formats",
         },
         {
             "name": "generate",
             "description": "Generate data such as lorem ipsum text",
-        }
+        },
+        {
+            "name": "other",
+            "description": "Other api endpoints that cannot be categorised",
+        },
     ]
     openapi_schema = get_openapi(
         title="Olly Tools API",
