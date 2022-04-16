@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Initialise FastAPI
-app = FastAPI(docs_url="/docs", redoc_url=None)
+app = FastAPI(docs_url="/", redoc_url=None)
 
 # Initialise CORS
 app.add_middleware(
@@ -27,11 +27,6 @@ app.include_router(generate.router)
 
 
 # App routes
-@app.get("/", tags=["other"])
-async def root():
-    return {"message": "Hello World"}
-
-
 @app.get("/hello/{name}", tags=["other"])
 async def say_hello(name: str):
     return {"message": f"Hello {name}"}
