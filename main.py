@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
@@ -7,7 +6,34 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Initialise FastAPI
-app = FastAPI(docs_url="/", redoc_url=None)
+tags_metadata = [
+        {
+            "name": "convert",
+            "description": "Convert data between different formats",
+        },
+        {
+            "name": "generate",
+            "description": "Generate data such as lorem ipsum text",
+        },
+        {
+            "name": "other",
+            "description": "Other api endpoints that cannot be categorised",
+        },
+    ]
+
+app = FastAPI(
+    title="Olly Tools API",
+    version="1.0.0",
+    description="A simple API with various tools",
+    contact={
+        "name": "Olly",
+        "url": "https://olly.ml",
+        "email": "olly@olly.ml",
+    },
+    openapi_tags=tags_metadata,
+    docs_url="/",
+    redoc_url=None
+)
 
 # Initialise CORS
 app.add_middleware(
@@ -30,35 +56,3 @@ app.include_router(generate.router)
 @app.get("/hello/{name}", tags=["other"])
 async def say_hello(name: str):
     return {"message": f"Hello {name}"}
-
-
-# Customise OpenAPI
-def custom_openapi():
-    if app.openapi_schema:
-        return app.openapi_schema
-    tags_metadata = [
-        {
-            "name": "convert",
-            "description": "Convert data between different formats",
-        },
-        {
-            "name": "generate",
-            "description": "Generate data such as lorem ipsum text",
-        },
-        {
-            "name": "other",
-            "description": "Other api endpoints that cannot be categorised",
-        },
-    ]
-    openapi_schema = get_openapi(
-        title="Olly Tools API",
-        version="1.0.0",
-        description="A simple API with various tools",
-        routes=app.routes,
-        tags=tags_metadata,
-    )
-    app.openapi_schema = openapi_schema
-    return app.openapi_schema
-
-
-app.openapi = custom_openapi
