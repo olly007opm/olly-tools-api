@@ -8,7 +8,7 @@ router = APIRouter(
 
 
 @router.get("/base-n", summary="Convert numbers across bases")
-def demo(number: str, origin_base: int, target_base: int, response: Response):
+def demo(response: Response, number: str, origin_base: int, target_base: int):
     # Convert number to base 10
     try:
         num = int(number, origin_base)
@@ -32,7 +32,7 @@ def demo(number: str, origin_base: int, target_base: int, response: Response):
 
 
 @router.get("/currency", summary="Convert an amount between currencies")
-def currency(amount: int, origin: str, target: str, response: Response):
+def currency(response: Response, amount: int, origin: str, target: str):
     """
     # Supported currencies
     ```
@@ -78,7 +78,7 @@ def currency(amount: int, origin: str, target: str, response: Response):
 
 
 @router.get("/to-roman", summary="Convert to roman numerals")
-def to_roman(number: int, response: Response):
+def to_roman(response: Response, number: int):
     if number < 1 or number > 3999:
         # Invalid number
         response.status_code = 400
@@ -138,7 +138,7 @@ def to_roman(number: int, response: Response):
 
 
 @router.get("/from-roman", summary="Convert from roman numerals")
-def from_roman(number: str, response: Response):
+def from_roman(response: Response, number: str):
     value = 0
     # Convert number to roman numerals
     for i in range(len(number)):
