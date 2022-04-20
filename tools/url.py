@@ -1,5 +1,5 @@
 import datetime
-from fastapi import APIRouter, Depends, Security, Response
+from fastapi import APIRouter, Depends, Security, Response, Form
 from fastapi.responses import RedirectResponse
 from auth_routes import auth
 
@@ -53,7 +53,8 @@ def url(response: Response, path: str, user=Depends(auth)):
 
 # Shorten a url
 @router.post('/url/shorten', summary="Shorten a url")
-def get_user(response: Response, url: str, user=Security(auth, scopes=["url_shorten"]), path: str = None, limit: int = None):
+def get_user(response: Response, url: str, user=Security(auth, scopes=["url_shorten"]),
+             path: str = Form(None), limit: int = Form(None)):
     reserved_paths = ["shorten", "get", "delete", "update"]
     if path in reserved_paths:
         response.status_code = 400
@@ -82,7 +83,7 @@ def get_user(response: Response, url: str, user=Security(auth, scopes=["url_shor
 # Update a shortened url
 @router.put('/url/update/{path}', summary="Update a shortened url")
 def update(response: Response, path: str, user=Depends(auth),
-           active: bool = None, limit: int = None, new_url: str = None, new_path: str = None):
+           active: bool = Form(None), limit: int = Form(None), new_url: str = Form(None), new_path: str = Form(None)):
     url = get_url_data(path)
     if url:
         if url['user'] == user['id'] or "url_update" in user['scopes']:
