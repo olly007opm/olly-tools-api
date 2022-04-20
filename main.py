@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
 
 # Load environment variables
+from dotenv import load_dotenv
 load_dotenv()
 
 # Initialise FastAPI
@@ -14,6 +14,14 @@ tags_metadata = [
         {
             "name": "generate",
             "description": "Generate data such as lorem ipsum text",
+        },
+        {
+            "name": "url",
+            "description": "Url shortening and expanding",
+        },
+        {
+            "name": "auth",
+            "description": "User authentication",
         },
         {
             "name": "other",
@@ -48,8 +56,13 @@ app.add_middleware(
 # Import all routes
 from tools import convert
 from tools import generate
+from tools import url
+import auth_routes
+
 app.include_router(convert.router)
 app.include_router(generate.router)
+app.include_router(url.router)
+app.include_router(auth_routes.router)
 
 
 # App routes
