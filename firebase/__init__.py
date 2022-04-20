@@ -12,26 +12,25 @@ db = None
 # Initialise Firestore
 def initialise_firestore():
     cred = credentials.Certificate({
-        "type": os.environ.get("FIREBASE_CERT_TYPE"),
-        "project_id": os.environ.get("FIREBASE_CERT_PROJECT_ID"),
+        "type": "service_account",
+        "project_id": "olly-tools",
         "private_key_id": os.environ.get("FIREBASE_CERT_PRIVATE_KEY_ID"),
         "private_key": os.environ.get("FIREBASE_CERT_PRIVATE_KEY"),
         "client_email": os.environ.get("FIREBASE_CERT_CLIENT_EMAIL"),
         "client_id": os.environ.get("FIREBASE_CERT_CLIENT_ID"),
-        "auth_uri": os.environ.get("FIREBASE_CERT_AUTH_URI"),
-        "token_uri": os.environ.get("FIREBASE_CERT_TOKEN_URI"),
-        "auth_provider_x509_cert_url": os.environ.get("FIREBASE_CERT_AUTH_PROVIDER_X509_CERT_URL"),
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
         "client_x509_cert_url": os.environ.get("FIREBASE_CERT_CLIENT_X509_CERT_URL")
     })
 
     firebase_admin.initialize_app(cred, {
         "apiKey": os.environ.get("FIREBASE_APIKEY"),
         "authDomain": os.environ.get("FIREBASE_AUTHDOMAIN"),
-        "projectId": os.environ.get("FIREBASE_PROJECTID"),
+        "projectId": "olly-tools",
         "storageBucket": os.environ.get("FIREBASE_STORAGEBUCKET"),
         "messagingSenderId": os.environ.get("FIREBASE_MESSAGINGSENDERID"),
         "appId": os.environ.get("FIREBASE_APPID"),
-        "measurementId": os.environ.get("FIREBASE_MEASUREMENTID")
     })
 
     return firestore.client()
