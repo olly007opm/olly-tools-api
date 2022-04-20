@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Security
+from fastapi import APIRouter, Depends, Security, Response
 from fastapi_login import LoginManager
 from fastapi.security import OAuth2PasswordRequestForm
 import os
@@ -15,7 +15,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 # Login a user
 @router.post('/login')
-def login(data: OAuth2PasswordRequestForm = Depends()):
+def login(response: Response, data: OAuth2PasswordRequestForm = Depends()):
     email = data.username
     password = data.password + os.environ.get("AUTH_PEPPER")
     uid = get_user_id(email)
@@ -30,19 +30,22 @@ def login(data: OAuth2PasswordRequestForm = Depends()):
         print(f"User {email} logged in with scopes {user['scopes']}")
         return {'access_token': access_token}
     else:
+        response.status_code = 400
         return {'error': 'invalid credentials'}
 
 
 # Create a new user in the db
 @router.post('/register')
-def register(site_key: str, data: OAuth2PasswordRequestForm = Depends()):
+def register(response: Response, site_key: str, data: OAuth2PasswordRequestForm = Depends()):
     if site_key != os.environ.get("AUTH_SITE_KEY"):
+        response.status_code = 400
         return {'error': 'invalid site key'}
     else:
         email = data.username
         password = data.password + os.environ.get("AUTH_PEPPER")
         print(f"Registering user {email}")
         if get_user_id(email):
+            response.status_code = 400
             return {'error': 'user already exists'}
 
         hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())

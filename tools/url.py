@@ -1,5 +1,5 @@
 import datetime
-from fastapi import APIRouter, Depends, Security
+from fastapi import APIRouter, Depends, Security, Response
 from fastapi.responses import RedirectResponse
 from auth_routes import auth
 
@@ -12,49 +12,55 @@ router = APIRouter(tags=["url"])
 
 # Go to a shortened url
 @router.get("/go/{path}", tags=["url"])
-def redirect(path: str):
+def redirect(response: Response, path: str):
     url = get_url_data(path)
     if url and url['active'] and (url['limit'] == -1 or url['uses'] < url['limit']):
         if url['limit'] != -1:
             db.collection('urls').document(url['id']).update({'uses': url['uses'] + 1})
         return RedirectResponse(url['url'])
     else:
+        response.status_code = 404
         return {"error": "Url not found"}
 
 
 # Expand a shortened url
 @router.get("/url/get/{path}", summary="Expand a shortened url")
-def url(path: str):
+def url(response: Response, path: str):
     url = get_url_data(path)
     if url and url['active'] and (url['limit'] == -1 or url['uses'] < url['limit']):
         if url['limit'] != -1:
             db.collection('urls').document(url['id']).update({'uses': url['uses'] + 1})
         return {"url": url['url']}
     else:
+        response.status_code = 404
         return {"error": "Url not found"}
 
 
 # Get data about a shortened url
 @router.get("/url/get_data/{path}", summary="Get data about a shortened url")
-def url(path: str, user=Depends(auth)):
+def url(response: Response, path: str, user=Depends(auth)):
     url = get_url_data(path)
     if url:
         if url['user'] == user['id'] or "url_get_data" in user['scopes']:
             return {"data": url}
         else:
+            response.status_code = 403
             return {"error": "You don't have permission to get data about this url"}
     else:
+        response.status_code = 404
         return {"error": "Url not found"}
 
 
 # Shorten a url
 @router.post('/url/shorten', summary="Shorten a url")
-def get_user(url: str, user=Security(auth, scopes=["url_shorten"]), path: str = None, limit: int = None):
+def get_user(response: Response, url: str, user=Security(auth, scopes=["url_shorten"]), path: str = None, limit: int = None):
     reserved_paths = ["shorten", "get", "delete", "update"]
     if path in reserved_paths:
+        response.status_code = 400
         return {"error": "Path is reserved"}
 
     if get_url_data(path):
+        response.status_code = 400
         return {"error": "Path is already taken"}
 
     else:
@@ -70,12 +76,12 @@ def get_user(url: str, user=Security(auth, scopes=["url_shorten"]), path: str = 
             'active': True,
             'limit': limit if limit else -1
         })
-        return {"shortened_url": f"https://tools-api.olly.ml/url/{path}"}
+        return {"shortened_url": f"https://tools-api.olly.ml/go/{path}"}
 
 
 # Update a shortened url
 @router.put('/url/update/{path}', summary="Update a shortened url")
-def update(path: str, user=Depends(auth),
+def update(response: Response, path: str, user=Depends(auth),
            active: bool = None, limit: int = None, new_url: str = None, new_path: str = None):
     url = get_url_data(path)
     if url:
@@ -92,6 +98,7 @@ def update(path: str, user=Depends(auth),
                 updates['url'] = new_url
             if new_path:
                 if get_url_data(new_path):
+                    response.status_code = 400
                     return {"error": "Path is already taken"}
                 else:
                     db.collection('urls').document(url['id']).update({'path': new_path})
@@ -99,22 +106,26 @@ def update(path: str, user=Depends(auth),
 
             return {"success": True, "updates": updates}
         else:
+            response.status_code = 403
             return {"error": "You don't have permission to update this url"}
     else:
+        response.status_code = 404
         return {"error": "Url not found"}
 
 
 # Delete a shortened url
 @router.delete("/url/delete/{path}", summary="Delete a shortened url")
-def delete_url(path: str, user=Depends(auth)):
+def delete_url(response: Response, path: str, user=Depends(auth)):
     url = get_url_data(path)
     if url:
         if url['user'] == user['id'] or "url_delete" in user['scopes']:
             db.collection('urls').document(url['id']).delete()
             return {"deleted": True}
         else:
+            response.status_code = 403
             return {"error": "You don't have permission to delete this url"}
     else:
+        response.status_code = 404
         return {"error": "Url not found"}
 
 
