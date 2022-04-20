@@ -51,7 +51,7 @@ def qr_code(data: str):
 
 
 @router.get("/password", summary="Generate a password")
-def password(response: Response, length: int = 8, upper: bool = True,
+def password(length: int = 8, upper: bool = True,
              lower: bool = True, digits: bool = True, symbols: bool = True, other: bool = False):
     import random
     upper_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -78,7 +78,7 @@ def password(response: Response, length: int = 8, upper: bool = True,
 
 
 @router.get("/hex-secret", summary="Generate a hex secret")
-def hex_secret(response: Response, length: int = 256):
+def hex_secret(length: int = 256):
     import random
     chars = "0123456789abcdef"
 

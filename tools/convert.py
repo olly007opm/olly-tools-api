@@ -138,12 +138,12 @@ def to_roman(response: Response, number: int):
 
 
 @router.get("/from-roman", summary="Convert from roman numerals")
-def from_roman(response: Response, number: str):
+def from_roman(number: str):
     value = 0
     # Convert number to roman numerals
     for i in range(len(number)):
         current = number[i]
-        next = number[i + 1] if i < len(number) - 1 else None
+        nextchar = number[i + 1] if i < len(number) - 1 else None
 
         def get_val(char):
             romanvalues = {"I": 1, "V": 5, "X": 10, "L": 50, "C": 100, "D": 500, "M": 1000}
@@ -152,7 +152,7 @@ def from_roman(response: Response, number: str):
             else:
                 return 0
 
-        if get_val(current) < get_val(next):
+        if get_val(current) < get_val(nextchar):
             value -= get_val(current)
         else:
             value += get_val(current)
