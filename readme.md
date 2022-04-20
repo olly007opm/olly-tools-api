@@ -33,6 +33,20 @@ An API containing various tools
 - Big text generator
 
 
+### URL Shortening
+- URL shortener
+- Updating shortened URLs
+- Deleting shortened URLs
+- Redirecting to shortened URLs
+
+
+### User Authentication
+- Logging in users
+- Logging out users
+- Registering users
+- Verifying user scopes
+
+
 ## Planned Tools
 - Find Pi and e to the nth digit
 - Find the nth digit of the fibonacci sequence
