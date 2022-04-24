@@ -1,3 +1,7 @@
+#  olly-tools-api | auth_routes.py
+#  Last modified: 24/04/2022, 12:37
+#  Copyright (c) 2022 Olly (https://olly.ml/). All rights reserved.
+
 from fastapi import APIRouter, Depends, Security, Response, Request
 from fastapi_login import LoginManager
 from fastapi.security import OAuth2PasswordRequestForm

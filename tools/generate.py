@@ -1,3 +1,7 @@
+#  olly-tools-api | generate.py
+#  Last modified: 24/04/2022, 12:30
+#  Copyright (c) 2022 Olly (https://olly.ml/). All rights reserved.
+
 from typing import Optional
 from fastapi import APIRouter, Response, Request, Form
 from fastapi.responses import StreamingResponse
