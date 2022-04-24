@@ -1,3 +1,7 @@
+#  olly-tools-api | main.py
+#  Last modified: 20/04/2022, 17:27
+#  Copyright (c) 2022 Olly (https://olly.ml/). All rights reserved.
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 

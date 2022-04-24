@@ -1,3 +1,7 @@
+#  olly-tools-api | __init__.py
+#  Last modified: 20/04/2022, 18:04
+#  Copyright (c) 2022 Olly (https://olly.ml/). All rights reserved.
+
 import os
 import firebase_admin
 from firebase_admin import credentials, firestore
