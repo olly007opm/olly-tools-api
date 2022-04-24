@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Security, Response
+from fastapi import APIRouter, Depends, Security, Response, Request
 from fastapi_login import LoginManager
 from fastapi.security import OAuth2PasswordRequestForm
 import os
@@ -36,10 +36,11 @@ def login(response: Response, data: OAuth2PasswordRequestForm = Depends()):
 
 # Create a new user in the db
 @router.post('/register')
-def register(response: Response, site_key: str, data: OAuth2PasswordRequestForm = Depends()):
-    if site_key != os.environ.get("AUTH_SITE_KEY"):
+def register(response: Response, request: Request, data: OAuth2PasswordRequestForm = Depends()):
+    origin = request.headers.get('origin')
+    if os.environ.get("AUTH_ORIGIN") == '*' or origin != os.environ.get("AUTH_ORIGIN"):
         response.status_code = 400
-        return {'error': 'invalid site key'}
+        return {'error': 'invalid origin'}
     else:
         email = data.username
         password = data.password + os.environ.get("AUTH_PEPPER")
@@ -80,6 +81,17 @@ def scope1(user=Security(auth, scopes=["scope1"])):
 @router.get('/scope2')
 def scope2(user=Security(auth, scopes=["scope2"])):
     return {'success': True}
+
+
+# Test request origin
+@router.post('/test-origin')
+def test_origin(response: Response, request: Request):
+    origin = request.headers.get('origin')
+    if origin != os.environ.get("AUTH_ORIGIN"):
+        response.status_code = 400
+        return {'invalid_origin': origin}
+    else:
+        return {'valid_origin': origin}
 
 
 # Get a user id from the db using an email address
