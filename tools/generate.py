@@ -1,5 +1,5 @@
 from typing import Optional
-from fastapi import APIRouter, Response
+from fastapi import APIRouter, Response, Request, Form
 from fastapi.responses import StreamingResponse
 
 router = APIRouter(
@@ -40,7 +40,7 @@ def random_number(response: Response, min: int = 0, max: int = 100):
 
 
 @router.post("/qr", summary="Generate a qr code", responses={200: {"content": {"image/png": {}}}}, response_class=Response)
-def qr_code(data: str):
+def qr_code(data: str = Form(...)):
     import qrcode
     from io import BytesIO
     qr = qrcode.make(data)
