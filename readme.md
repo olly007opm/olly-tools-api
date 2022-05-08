@@ -24,6 +24,18 @@ An API containing various tools
 - Roman to arabic numeral
 
 
+### Find
+- Find the nth digit of the fibonacci sequence
+- Find all prime factors of a given number
+- Count words/characters/sentences
+- Reverse text
+- Check if palindrome (reads the same forwards as backwards like "racecar")
+
+
+### Games
+- Noughts and crosses game
+
+
 ### Generators
 - Lorem ipsum dummy text generator
 - Random number generator
@@ -49,16 +61,12 @@ An API containing various tools
 
 ## Planned Tools
 - Find Pi and e to the nth digit
-- Find the nth digit of the fibonacci sequence
-- Find all prime factors of a given number
 - Unit converter
   - Temperature (C, F and K)
   - Volume
   - Mass
-- Reverse text
-- Count words/characters/sentences
-- Check if palindrome (reads the same forwards as backwards like "racecar")
 - Vigenere / Vernam / Ceasar Ciphers (encode and decode)
 - Base 64 encode and decode
 - Weather
 - Whois lookup
+- Battleship game

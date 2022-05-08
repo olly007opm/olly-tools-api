@@ -1,5 +1,5 @@
 #  olly-tools-api | main.py
-#  Last modified: 20/04/2022, 17:27
+#  Last modified: 08/05/2022, 08:51
 #  Copyright (c) 2022 Olly (https://olly.ml/). All rights reserved.
 
 from fastapi import FastAPI
@@ -14,6 +14,14 @@ tags_metadata = [
         {
             "name": "convert",
             "description": "Convert data between different formats",
+        },
+        {
+            "name": "find",
+            "description": "Find values",
+        },
+        {
+            "name": "game",
+            "description": "Games",
         },
         {
             "name": "generate",
@@ -59,11 +67,15 @@ app.add_middleware(
 
 # Import all routes
 from tools import convert
+from tools import find
+from tools import game
 from tools import generate
 from tools import url
 import auth_routes
 
 app.include_router(convert.router)
+app.include_router(find.router)
+app.include_router(game.router)
 app.include_router(generate.router)
 app.include_router(url.router)
 app.include_router(auth_routes.router)
@@ -71,5 +83,26 @@ app.include_router(auth_routes.router)
 
 # App routes
 @app.get("/hello/{name}", tags=["other"])
-async def say_hello(name: str):
+def say_hello(name: str):
     return {"message": f"Hello {name}"}
+
+
+@app.get("/planned", tags=["other"])
+def planned():
+    """
+    Planned features
+    - Find Pi and e to the nth digit
+    - Unit converter
+      - Temperature (C, F and K)
+      - Volume
+      - Mass
+    - Reverse text
+    - Check if palindrome (reads the same forwards as backwards like "racecar")
+    - Vigenere / Vernam / Ceasar Ciphers (encode and decode)
+    - Base 64 encode and decode
+    - Weather
+    - Whois lookup
+    - Noughts and crosses game
+    - Battleship game
+    """
+    return {"message": "This API is currently under development"}

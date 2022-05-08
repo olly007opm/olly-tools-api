@@ -11,7 +11,7 @@ router = APIRouter(
 
 
 @router.get("/", summary="A demo route in the template file")
-async def demo():
+def demo():
     """
     Some demo text that will show up in the docs.
     """
