@@ -1,5 +1,5 @@
-#  olly-tools-api | main.py
-#  Last modified: 08/05/2022, 08:51
+#  olly-tools-api | app.py
+#  Last modified: 26/07/2022, 18:00
 #  Copyright (c) 2022 Olly (https://olly.ml/). All rights reserved.
 
 from fastapi import FastAPI
@@ -26,6 +26,10 @@ tags_metadata = [
         {
             "name": "generate",
             "description": "Generate data such as lorem ipsum text",
+        },
+        {
+            "name": "track",
+            "description": "Tracking",
         },
         {
             "name": "url",
@@ -66,17 +70,19 @@ app.add_middleware(
 
 
 # Import all routes
-from tools import convert
-from tools import find
-from tools import game
-from tools import generate
-from tools import url
-import auth_routes
+from api.tools import convert
+from api.tools import find
+from api.tools import game
+from api.tools import generate
+from api.tools import track
+from api.tools import url
+import api.auth_routes as auth_routes
 
 app.include_router(convert.router)
 app.include_router(find.router)
 app.include_router(game.router)
 app.include_router(generate.router)
+app.include_router(track.router)
 app.include_router(url.router)
 app.include_router(auth_routes.router)
 
