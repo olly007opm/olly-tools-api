@@ -28,7 +28,7 @@ def track(request: Request, response: Response, code: str):
         tracking_data = {
             'timestamp': datetime.datetime.now(),
             'ip': request.client.host,
-            'mobile': "1" in request.headers.get("sec-ch-ua-mobile"),
+            'mobile': request.headers.get("sec-ch-ua-mobile"),
             'platform': request.headers.get("sec-ch-ua-platform"),
             'user-agent': request.headers.get("user-agent"),
             'language': request.headers.get("accept-language"),
