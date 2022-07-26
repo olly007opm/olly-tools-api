@@ -42,7 +42,6 @@ def track(request: Request, response: Response, code: str):
             'language': request.headers.get("accept-language"),
         }
         add_tracking_data(code, tracking_data)
-        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
     else:
         response.status_code = 404
     return FileResponse("api/other/empty.png", headers=headers)
