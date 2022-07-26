@@ -1,5 +1,5 @@
 #  olly-tools-api | auth_routes.py
-#  Last modified: 08/05/2022, 08:27
+#  Last modified: 26/07/2022, 17:58
 #  Copyright (c) 2022 Olly (https://olly.ml/). All rights reserved.
 
 from fastapi import APIRouter, Depends, Security, Response, Request
@@ -9,7 +9,7 @@ import os
 import bcrypt
 
 # Initialise firestore database
-from firebase import get_database
+from api.firebase import get_database
 db = get_database()
 
 # Initialise login manager and router

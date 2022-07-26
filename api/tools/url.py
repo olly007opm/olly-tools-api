@@ -1,14 +1,14 @@
 #  olly-tools-api | url.py
-#  Last modified: 08/05/2022, 08:27
+#  Last modified: 26/07/2022, 18:50
 #  Copyright (c) 2022 Olly (https://olly.ml/). All rights reserved.
 
 import datetime
 from fastapi import APIRouter, Depends, Security, Response, Form
 from fastapi.responses import RedirectResponse
-from auth_routes import auth
+from api.auth_routes import auth
 
 # Get the database
-from firebase import get_database
+from api.firebase import get_database
 db = get_database()
 
 router = APIRouter(tags=["url"])
@@ -29,7 +29,7 @@ def redirect(response: Response, path: str):
 
 # Expand a shortened url
 @router.get("/url/get/{path}", summary="Expand a shortened url")
-def url(response: Response, path: str):
+def expand(response: Response, path: str):
     url = get_url_data(path)
     if url and url['active'] and (url['limit'] == -1 or url['uses'] < url['limit']):
         if url['limit'] != -1:
@@ -42,7 +42,7 @@ def url(response: Response, path: str):
 
 # Get data about a shortened url
 @router.get("/url/get_data/{path}", summary="Get data about a shortened url")
-def url(response: Response, path: str, user=Depends(auth)):
+def get_data(response: Response, path: str, user=Depends(auth)):
     url = get_url_data(path)
     if url:
         if url['user'] == user['id'] or "url_get_data" in user['scopes']:
@@ -57,7 +57,7 @@ def url(response: Response, path: str, user=Depends(auth)):
 
 # Shorten a url
 @router.post('/url/shorten', summary="Shorten a url")
-def get_user(response: Response, url: str, user=Security(auth, scopes=["url_shorten"]),
+def shorten(response: Response, url: str, user=Security(auth, scopes=["url_shorten"]),
              path: str = Form(None), limit: int = Form(None)):
     reserved_paths = ["shorten", "get", "delete", "update"]
     if path in reserved_paths:
@@ -120,7 +120,7 @@ def update(response: Response, path: str, user=Depends(auth),
 
 # Delete a shortened url
 @router.delete("/url/delete/{path}", summary="Delete a shortened url")
-def delete_url(response: Response, path: str, user=Depends(auth)):
+def delete(response: Response, path: str, user=Depends(auth)):
     url = get_url_data(path)
     if url:
         if url['user'] == user['id'] or "url_delete" in user['scopes']:
