@@ -20,9 +20,17 @@ router = APIRouter(
 
 
 # Go to a tracking pixel
+@router.get("/test")
+def test(request: Request, response: Response):
+    headers = {"Cache-Control": "no-cache, no-store, must-revalidate, max-age=0"}
+    return FileResponse("api/other/empty.png", headers=headers)
+
+
+# Go to a tracking pixel
 @router.get("/pixel/{code}")
 def track(request: Request, response: Response, code: str):
     data = get_pixel_data(code)
+    headers = {"Cache-Control": "no-cache, no-store, must-revalidate, max-age=0"}
     if data and data['active']:
         print(request.headers)
         tracking_data = {
@@ -35,10 +43,9 @@ def track(request: Request, response: Response, code: str):
         }
         add_tracking_data(code, tracking_data)
         response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
-        return FileResponse("api/other/empty.png")
     else:
         response.status_code = 404
-        return FileResponse("api/other/empty.png")
+    return FileResponse("api/other/empty.png", headers=headers)
 
 
 # Create a tracking pixel
