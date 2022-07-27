@@ -27,7 +27,7 @@ def test(request: Request, response: Response):
 
 
 # Go to a tracking pixel
-@router.get("/pixel/{code}")
+@router.get("/pixel/{code}.png")
 def track(request: Request, response: Response, code: str):
     data = get_pixel_data(code)
     headers = {"Cache-Control": "no-cache, no-store, must-revalidate, max-age=0"}
